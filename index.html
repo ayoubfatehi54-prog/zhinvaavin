@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>اینفوگرافیک برنامه «ژین و ئه وین»</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b1020;
+    --card:rgba(255,255,255,.045);
+    --line:rgba(255,255,255,.10);
+    --txt:#e8ecf7;
+    --muted:#96a3bf;
+    --c1:#26d0a5; --c2:#4f8cff; --c3:#ffb020; --c4:#ff6b8a;
+    --c5:#a78bfa; --c6:#22d3ee; --c7:#84cc16; --c8:#f472b6;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:'Vazirmatn',system-ui,-apple-system,sans-serif;
+    color:var(--txt);
+    background:
+      radial-gradient(1100px 620px at 85% -12%, rgba(79,140,255,.20), transparent 62%),
+      radial-gradient(900px 520px at 8% 6%, rgba(38,208,165,.14), transparent 60%),
+      radial-gradient(800px 500px at 50% 110%, rgba(167,139,250,.14), transparent 60%),
+      var(--bg);
+    min-height:100vh;
+    padding:26px 16px 70px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1180px;margin:0 auto}
+
+  /* HERO */
+  .hero{
+    position:relative;overflow:hidden;text-align:center;
+    padding:44px 24px 38px;border-radius:30px;margin-bottom:24px;
+    border:1px solid rgba(255,255,255,.10);
+    background:linear-gradient(160deg, rgba(79,140,255,.18), rgba(167,139,250,.10) 45%, rgba(38,208,165,.12));
+    box-shadow:0 24px 60px -30px rgba(0,0,0,.9);
+  }
+  .hero::after{
+    content:"";position:absolute;inset:-40% -10% auto auto;width:420px;height:420px;border-radius:50%;
+    background:radial-gradient(circle, rgba(79,140,255,.35), transparent 65%);
+    filter:blur(20px);pointer-events:none;
+  }
+  .pill{
+    display:inline-block;font-size:13px;padding:7px 16px;border-radius:999px;
+    background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);
+    color:#cfd9f2;letter-spacing:.2px;
+  }
+  .hero h1{
+    font-size:clamp(42px,7.6vw,78px);line-height:1.1;margin:16px 0 6px;font-weight:800;
+    background:linear-gradient(100deg,#ffffff,#9dc3ff 40%,#5ff0c6 75%,#ffffff);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 8px 30px rgba(79,140,255,.35));
+  }
+  .hero p{margin:8px auto 0;max-width:720px;color:#b9c5df;font-size:15px;line-height:1.9}
+
+  /* KPI */
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px;margin-bottom:22px}
+  .kpi{
+    position:relative;overflow:hidden;padding:22px 20px;border-radius:22px;
+    background:var(--card);border:1px solid var(--line);
+    backdrop-filter:blur(10px);transition:transform .3s ease, border-color .3s ease;
+  }
+  .kpi::before{content:"";position:absolute;inset-inline:0;top:0;height:3px;background:var(--ac,var(--c2))}
+  .kpi:hover{transform:translateY(-5px);border-color:rgba(79,140,255,.45)}
+  .kpi .val{font-size:38px;font-weight:800;line-height:1.15;color:#fff}
+  .kpi .val small{font-size:15px;font-weight:500;color:var(--muted);margin-inline-start:6px}
+  .kpi .lbl{margin-top:6px;font-size:13.5px;color:var(--muted);line-height:1.7}
+  .kpi .ic{position:absolute;inset-inline-start:16px;top:16px;font-size:22px;opacity:.35}
+
+  /* CARDS */
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:24px;padding:24px;
+    backdrop-filter:blur(10px);box-shadow:0 18px 46px -34px rgba(0,0,0,.9);
+  }
+  .card h2{margin:0 0 4px;font-size:18px;font-weight:700;display:flex;align-items:center;gap:9px}
+  .card h2 .dot{width:9px;height:9px;border-radius:50%;background:var(--c2);box-shadow:0 0 12px var(--c2)}
+  .card .hint{margin:0 0 18px;font-size:12.5px;color:var(--muted);line-height:1.8}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:22px}
+  section.block{margin-bottom:22px}
+  @media(max-width:900px){.grid2{grid-template-columns:1fr}}
+
+  /* DONUT */
+  .donut-wrap{display:flex;justify-content:center;margin:4px 0 14px}
+  .donut-wrap svg{overflow:visible}
+  .donut-seg{cursor:pointer;transition:opacity .25s ease}
+  .donut-center-num{font-size:32px;font-weight:800;fill:#fff}
+  .donut-center-lbl{font-size:12px;fill:#96a3bf}
+  .legend{display:grid;grid-template-columns:1fr 1fr;gap:8px 14px}
+  .lg{display:flex;align-items:center;gap:8px;padding:7px 9px;border-radius:12px;cursor:pointer;
+      transition:background .2s ease;font-size:12.8px}
+  .lg:hover{background:rgba(255,255,255,.06)}
+  .lg i{width:10px;height:10px;border-radius:3px;flex:none}
+  .lg span{flex:1;color:#c8d2e8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .lg b{color:#fff;font-weight:600;font-size:12px}
+  .lg em{color:var(--muted);font-style:normal;font-size:11.5px;min-width:44px;text-align:left}
+
+  /* BARS */
+  .bar-row{display:grid;grid-template-columns:160px 1fr 78px;align-items:center;gap:12px;margin-bottom:13px}
+  .bar-row .bl{font-size:13px;color:#cbd5ea;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .track{height:13px;border-radius:999px;background:rgba(255,255,255,.07);overflow:hidden}
+  .fill{height:100%;width:0;border-radius:999px;transition:width 1.1s cubic-bezier(.2,.8,.2,1)}
+  .bar-row .bv{font-size:12.5px;color:#e7edfb;text-align:left;font-weight:600}
+  @media(max-width:520px){.bar-row{grid-template-columns:110px 1fr 64px}.bar-row .bl{font-size:12px}}
+
+  /* TIMELINE */
+  .tl{position:relative}
+  .tl::before{
+    content:"";position:absolute;inset-inline-end:11px;top:10px;bottom:10px;width:2px;
+    background:linear-gradient(180deg,rgba(79,140,255,.7),rgba(38,208,165,.6),rgba(167,139,250,.6));
+    border-radius:2px;
+  }
+  .tl-item{position:relative;padding-inline-end:40px;margin-bottom:20px}
+  .tl-item:last-child{margin-bottom:0}
+  .tl-item::before{
+    content:"";position:absolute;inset-inline-end:5px;top:10px;width:14px;height:14px;border-radius:50%;
+    background:var(--dot,#4f8cff);box-shadow:0 0 0 4px rgba(79,140,255,.16), 0 0 16px var(--dot,#4f8cff);
+  }
+  .tl-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:2px}
+  .tl-date{font-weight:700;font-size:14.5px;color:#fff}
+  .tl-num{font-size:11.5px;color:var(--muted)}
+  .chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}
+  .chip{
+    display:inline-flex;align-items:center;gap:7px;font-size:12.3px;padding:5px 11px;border-radius:999px;
+    background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.09);color:#d3dcf0;
+  }
+  .chip i{width:7px;height:7px;border-radius:50%;flex:none}
+  .chip em{font-style:normal;color:#8ea0c2;font-size:11.3px}
+
+  /* TABLE */
+  .tools{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+  .tools input,.tools select{
+    font-family:inherit;font-size:13px;color:#e8ecf7;background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.13);border-radius:12px;padding:10px 14px;outline:none;
+  }
+  .tools input{flex:1;min-width:170px}
+  .tools input:focus,.tools select:focus{border-color:rgba(79,140,255,.6);box-shadow:0 0 0 3px rgba(79,140,255,.15)}
+  .tools select option{background:#141b2e;color:#e8ecf7}
+  .table-wrap{max-height:430px;overflow:auto;border-radius:16px;border:1px solid var(--line)}
+  table{width:100%;border-collapse:collapse;font-size:13.3px}
+  thead th{
+    position:sticky;top:0;z-index:2;background:#151d33;color:#aab8d6;font-weight:600;
+    padding:12px 14px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap;
+  }
+  tbody td{padding:11px 14px;border-bottom:1px solid rgba(255,255,255,.055);color:#d7dff1}
+  tbody tr:hover td{background:rgba(79,140,255,.09)}
+  tbody tr:last-child td{border-bottom:none}
+  .mini-bar{display:inline-block;height:7px;border-radius:999px;vertical-align:middle;margin-inline-end:8px}
+  .empty{padding:26px;text-align:center;color:var(--muted)}
+
+  footer{max-width:1180px;margin:34px auto 0;text-align:center;color:#6f7d9b;font-size:12.5px;line-height:2}
+  footer b{color:#a9b6d4}
+
+  @media(max-width:560px){
+    .legend{grid-template-columns:1fr}
+    .card{padding:18px;border-radius:20px}
+    .hero{padding:32px 18px 28px;border-radius:24px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <span class="pill">برنامه خانواده · طبقه «ج» · ترکیبی فاقد نمایش · ۷۰٪ زنده / ۳۰٪ ضبطی</span>
+    <h1>ژین و ئه وین</h1>
+    <p>تحلیل موضوعی ۳۰ تاریخ ثبت‌شده از برنامه «ژین و ئه وین»؛ مروری بر محورهای خانوادگی، تربیتی، سلامت، مصرف بهینه، محیط زیست و ارزش‌های اجتماعی در ۱۵۰۰ دقیقه محتوای ثبت‌شده</p>
+  </header>
+
+  <section class="kpis" id="kpis"></section>
+
+  <section class="block grid2">
+    <div class="card">
+      <h2><span class="dot" style="--c2:#4f8cff"></span>سهم محورهای موضوعی</h2>
+      <p class="hint">سهم هر محور از کل زمان ۱۵۰۰ دقیقه‌ای ثبت‌شده</p>
+      <div class="donut-wrap">
+        <svg id="donut" width="270" height="270" viewBox="0 0 260 260" role="img" aria-label="نمودار حلقه‌ای سهم محورهای موضوعی"></svg>
+      </div>
+      <div class="legend" id="legend"></div>
+    </div>
+
+    <div class="card">
+      <h2><span class="dot" style="--c2:#26d0a5"></span>مدت زمان به تفکیک محور</h2>
+      <p class="hint">مجموع دقایق اختصاص‌یافته به هر محور موضوعی</p>
+      <div id="bars"></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="card">
+      <h2><span class="dot" style="--c2:#ffb020"></span>خط زمانی قسمت‌ها و موضوعات</h2>
+      <p class="hint">۳۰ تاریخ ثبت‌شده — هر تاریخ معادل یک قسمت ۵۰ دقیقه‌ای</p>
+      <div class="tl" id="timeline"></div>
+    </div>
+  </section>
+
+  <section class="block grid2">
+    <div class="card">
+      <h2><span class="dot" style="--c2:#a78bfa"></span>طولانی‌ترین موضوعات</h2>
+      <p class="hint">بیشترین زمان اختصاص‌یافته به یک موضوع در یک قسمت</p>
+      <div id="topTopics"></div>
+    </div>
+
+    <div class="card">
+      <h2><span class="dot" style="--c2:#f472b6"></span>جدول محورهای موضوعی</h2>
+      <p class="hint">تعداد قسمت‌ها، دقایق و سهم هر محور</p>
+      <div class="table-wrap" style="max-height:360px">
+        <table>
+          <thead>
+            <tr><th>محور موضوعی</th><th>قسمت</th><th>دقیقه</th><th>سهم</th></tr>
+          </thead>
+          <tbody id="themeTbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="card">
+      <h2><span class="dot" style="--c2:#22d3ee"></span>ریز داده‌ها</h2>
+      <p class="hint">همهٔ ۳۳۲ رکورد موضوعی — قابل جست‌وجو و فیلتر بر اساس محور</p>
+      <div class="tools">
+        <input id="search" type="search" placeholder="جست‌وجوی موضوع… (مثلاً خانواده، صرفه‌جویی، درخت)">
+        <select id="filter"></select>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>تاریخ</th><th>محور موضوعی</th><th>موضوع درخت‌واره</th><th>مدت</th></tr>
+          </thead>
+          <tbody id="dataTbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    منبع داده: فایل <b>ژین و ئه وین.xlsx</b> · برگهٔ RadGridExport<br>
+    اینفوگرافیک تعاملی — ساخته‌شده با HTML / CSS / JavaScript
+  </footer>
+</div>
+
+<script>
+/* =========================================================
+   1) داده‌ها (بر اساس فایل اکسل)
+   ========================================================= */
+const EPISODES = [
+  {date:'1405/01/11', topics:[
+    ['امید به خدا',5],['مبارزه با ظلم و ظالم',5],['معاشرت و رفتار اجتماعی',5],['نوروز',5],
+    ['همکاری مردم با مسئولان',5],['دشمن شناسی',5],['مشارکت مردمی و تأمین امنیت',5],
+    ['امید و سلامت جسم و روح',5],['رسانه ملی، صدا و سیما',5],['تدبیر،چاره جویی، چاره اندیشی، تمهید',5]
+  ]},
+  {date:'1405/01/16', topics:[
+    ['صمیمیت و دل‌بستگی',5],['آداب و رفتارهای اجتماعی فرزندان',5],['امنیت اجتماعی',5],
+    ['مشاوره خانواده',5],['کانون آرامش و مرکز تربیت',5],['عشق و محبت در خانواده',5],
+    ['مسائل روحی و روانی',10],['سلامت و امنیت اجتماعی',5],['حمله، تهاجم',5]
+  ]},
+  {date:'1405/01/23', topics:[
+    ['احترام و مودّت و رحمت',5],['جایگاه صحیح در خانواده',10],['احترام متقابل',5],
+    ['همدلی',10],['صلح و سازش',5],['فشار روانی، تنیدگی، استرس',5],
+    ['مبارزه با ظلم و ظالم',5],['حمله، تهاجم',5]
+  ]},
+  {date:'1405/01/25', topics:[
+    ['همبستگی ملی',5],['مبارزه با ظلم و ظالم',5],['خانواده',5],['مهارت آموزی فرزندان',5],
+    ['امید به زندگی',5],['همدلی',10],['همیاری و کمک',5],['حزن، اندوه، غم و غصه',5],['حمله، تهاجم',5]
+  ]},
+  {date:'1405/01/30', topics:[
+    ['تفکرپروری',5],['امر به معروف و نهی از منکر',5],['مهارت های تربیتی',5],
+    ['دانش افزای فرزندان',5],['آداب و رفتارهای فردی فرزندان',10],['اوقات فراغت فرزندان',5],
+    ['انواع بازی رایانه‌ای',5],['فشار روانی، تنیدگی، استرس',5],['هنجارهای فرهنگی و اجتماعی',5]
+  ]},
+  {date:'1405/02/01', topics:[
+    ['رفتارهای معنوی',7.5],['مهارت آموزی فرزندان',5],['امنیت اجتماعی',5],
+    ['استفاده بهینه از حامل‌های انرژی (برق، گاز و...)',2.5],['توزیع و پخش مواد مخدر و روان گردان',15],
+    ['صرفه‌جویی در مصارف خانگی',5],['روش‌های صرفه جویی',2.5],['استفاده بهینه از حامل‌های انرژی',2.5],
+    ['درخت و درختکاری',2.5],['حمله، تهاجم',2.5]
+  ]},
+  {date:'1405/02/03', topics:[
+    ['روابط صحیح در خانواده،',5],['الگوی مطلوب پوشش و آرایش',5],['مشاوره خانواده',5],
+    ['مشاوره ازدواج',5],['همدلی',5],['استفاده بهینه از حامل‌های انرژی (برق، گاز و...)',5],
+    ['انواع مشاوره سلامت',5],['صرفه‌جویی در مصارف خانگی',2.5],['روش‌های صرفه جویی',2.5],
+    ['درخت و درختکاری',5],['مشورت کردن',5]
+  ]},
+  {date:'1405/02/06', topics:[
+    ['استفاده بهینه از حامل‌های انرژی (برق، گاز و...)',5],['درخت و درختکاری',5],
+    ['عکس‌العمل، واکنش',2.5],['امیدواری، امید و آرزو',2.5],['روش‌های صرفه جویی',2.5],
+    ['هدایت فکری و رفتاری',5],['صرفه‌جویی در مصارف خانگی',2.5],['استعداد، توانایی‌ها',5],
+    ['مسئولیت اجتماعی',2.5],['همدلی',5],['سبک زندگی سالم',5],['کار گروهی',2.5],['جایگاه صحیح در خانواده',5]
+  ]},
+  {date:'1405/02/08', topics:[
+    ['روش‌های صرفه جویی',2.5],['استفاده بهینه از حامل‌های انرژی (برق، گاز و...)',5],
+    ['همبستگی ملی',5],['خودباوی ملی',5],['مبارزه با ظلم و ظالم',5],['خانواده',5],
+    ['همدلی',5],['صرفه‌جویی در مصارف خانگی',2.5],['حفظ وحدت ملی',2.5],
+    ['دشمن شناسی',2.5],['درخت و درختکاری',5],['حمله، تهاجم',5]
+  ]},
+  {date:'1405/02/10', topics:[
+    ['استفاده بهینه از حامل‌های انرژی (برق، گاز و...)',5],['آسیب‌های فضای مجازی',2.5],
+    ['احترام به عقاید و حقوق دیگران',5],['خلیج فارس',10],['حمله، تهاجم',2.5],
+    ['همدلی',5],['دوستی‌های ناسالم و مفاسذد خلاقی',5],['داروهای گیاهی',2.5],
+    ['روش‌های صرفه جویی',2.5],['درخت و درختکاری',5],['تربیت فرزندان',2.5],
+    ['آداب و رفتارهای اجتماعی فرزندان',2.5]
+  ]},
+  {date:'1405/02/12', topics:[
+    ['آموزش و پرورش',10],['کلاس درس',5],['تجلیل از معلم',5],['مناطق جنگی',2.5],
+    ['استفاده بهینه از حامل‌های انرژی (برق، گاز و...)',5],['همدلی',5],
+    ['روش‌های صرفه جویی',2.5],['درخت و درختکاری',5],['فضاهای آموزشی مجازی',2.5],
+    ['کاهش مصرف',2.5],['حمله، تهاجم',5]
+  ]},
+  {date:'1405/02/13', topics:[
+    ['روش‌های صرفه جویی',2.5],['آموزش و پرورش',5],['دانش‌آموز',5],['تجلیل از معلم',7.5],
+    ['همدلی',5],['صرفه‌جویی در مصارف خانگی',2.5],['استفاده بهینه از حامل‌های انرژی',5],
+    ['درخت و درختکاری',5],['فضاهای آموزشی مجازی',5],['تشکرکردن، سپاسگزاری',5],['حمله، تهاجم',2.5]
+  ]},
+  {date:'1405/02/15', topics:[
+    ['استفاده بهینه از حامل‌های انرژی (برق، گاز و...)',2.5],['اوقات فراغت فرزندان',10],
+    ['همدلی',5],['آموزش طب سنتی',5],['بازی‌ محلی',2.5],['بازی‌های هیجانی-ماجرایی',5],
+    ['بازی‌های ورزشی',5],['صرفه‌جویی در مصارف خانگی',2.5],['روش‌های صرفه جویی',2.5],
+    ['درخت و درختکاری',5],['شادی و نشاط',2.5],['کودک، کودکان',2.5]
+  ]},
+  {date:'1405/02/17', topics:[
+    ['صرفه‌جویی در مصارف خانگی',2.5],['روش‌های صرفه جویی',2.5],['درخت و درختکاری',5],
+    ['صمیمیت و دل‌بستگی',2.5],['ازدواج بهنگام',5],['ازدواج آگاهانه',5],
+    ['رعایت تناسبات فرهنگی در انتخاب همسر',5],['تحقیق پیش از ازدواج',2.5],
+    ['فواید اجتماعی ازدواج',5],['معیارهای ازدواج',5],['همدلی',5],
+    ['استفاده بهینه از حامل‌های انرژی (برق، گاز و...)',5]
+  ]},
+  {date:'1405/02/20', topics:[
+    ['همبستگی ملی',5],['مبارزه با ظلم و ظالم',5],['احترام و مودّت و رحمت',2.5],
+    ['سبک زندگی سالم',2.5],['خانواده',7.5],['صرفه‌جویی در مصارف خانگی',2.5],
+    ['استفاده بهینه از حامل‌های انرژی (برق، گاز و...)',2.5],['همدلی',5],
+    ['صرفه‌جویی در مصارف خانگی',2.5],['روش‌های صرفه جویی',2.5],['عواقب اسراف در مصرف',2.5],
+    ['درخت و درختکاری',5],['روابط خانوادگی(والدین، فرزندان و اعضای خانواده)',2.5],
+    ['مدیریت اقتصادی(مدیریت منابع و مصارف)',2.5]
+  ]},
+  {date:'1405/02/22', topics:[
+    ['مدیریت اقتصادی(مدیریت منابع و مصارف)',2.5],['صرفه جویی در مصرف آب',2.5],
+    ['فرصت‌های شغلی',2.5],['استقلال، مستقل بودن',2.5],['کاهش مصرف',2.5],
+    ['درخت و درختکاری',5],['استفاده بهینه از حامل‌های انرژی',2.5],['اقتصاد خانواده',5],
+    ['روش‌های صرفه جویی',2.5],['مشاغل خانگی، خود اشتغالی',2.5],['صرفه‌جویی در مصارف خانگی',2.5],
+    ['استفاده بهینه از حامل‌های انرژی (برق، گاز و...)',2.5],['فناوری و اصلاح الگوی مصرف',2.5],
+    ['رزق و روزی حلال',2.5],['زنان و عرصه‌های اقتصادی',5],['همدلی',5]
+  ]},
+  {date:'1405/02/24', topics:[
+    ['استفاده بهینه از حامل‌های انرژی (برق، گاز و...)',2.5],['ارتباط کلامی مناسب',5],
+    ['احترام و مودّت و رحمت',2.5],['سلامت اخلاقی',2.5],['روابط صحیح در خانواده،',2.5],
+    ['مهارت های تربیتی',2.5],['سازمان آتش نشانی و خدمات ایمنی',2.5],['همدلی',2.5],
+    ['روش‌های صرفه جویی',2.5],['صرفه جویی در مصرف در مصارف خانگی',2.5],
+    ['درخت و درختکاری',5],['خشونت',15],['حمله، تهاجم',2.5]
+  ]},
+  {date:'1405/02/27', topics:[
+    ['تصمیم‌گیری',2.5],['صرفه جویی در مصرف آب',2.5],['افزایش مصرف',2.5],
+    ['مدیریت اقتصادی(مدیریت منابع و مصارف)',2.5],['برنامه‌ریزی',2.5],['درخت و درختکاری',5],
+    ['فناوری و اصلاح الگوی مصرف',2.5],['صرفه‌جویی در مصارف خانگی',2.5],['روش‌های صرفه جویی',2.5],
+    ['عواقب اسراف در مصرف',2.5],['صرفه جویی در مصرف در مصارف خانگی',2.5],
+    ['استفاده بهینه از حامل‌های انرژی',2.5],['رعایت نظم اجتماعی',2.5],['همدلی',5],
+    ['مبارزه با ظلم و ظالم',2.5],['مهارت "نه گفتن"در نوجوانان و جوانان',2.5],
+    ['الگوی مصرف',2.5],['حمله، تهاجم',2.5]
+  ]},
+  {date:'1405/02/29', topics:[
+    ['برق',2.5],['درخت و درختکاری',5],['مدیریت اقتصادی(مدیریت منابع و مصارف)',2.5],
+    ['بهره‌وری و اصلاح الگوی مصرف',2.5],['آب',2.5],['گاز',2.5],['روش‌های صرفه جویی',2.5],
+    ['استفاده بهینه از حامل‌های انرژی',2.5],['آموزش آشپزی',2.5],['صرفه‌جویی در مصارف خانگی',5],
+    ['ازدواج و تشکیل خانواده',2.5],['ازدواج ساده و آسان',5],['معیارهای انتخاب همسر',2.5],
+    ['ابعاد قدسی و معنوی ازدواج',2.5],['مشاوره ازدواج',2.5],['وسایل و تجهیزات امداد و نجات',2.5],
+    ['همدلی',2.5]
+  ]},
+  {date:'1405/02/31', topics:[
+    ['خدمت کردن، خدمتگزاری',15],['درخت و درختکاری',5],['مدیریت اقتصادی(مدیریت منابع و مصارف)',2.5],
+    ['روش‌های صرفه جویی',5],['استفاده بهینه از حامل‌های انرژی',2.5],
+    ['بهره‌وری و اصلاح الگوی مصرف',2.5],['صرفه‌جویی در مصارف خانگی',2.5],
+    ['قرآن',5],['کمک به نیازمندان',5],['همدلی',5]
+  ]},
+  {date:'1405/03/03', topics:[
+    ['همدلی',5],['آموزش طب سنتی',5],['صرفه‌جویی در مصارف خانگی',5],['روش‌های صرفه جویی',5],
+    ['درخت و درختکاری',5],['موفقیت',5],['خودباوری و اعتماد به نفس',5],
+    ['آموزه‌های دینی مصرف',5],['کاهش مصرف',5],['فکر، اندیشه، تفکر، اندیشیدن',5]
+  ]},
+  {date:'1405/03/05', topics:[
+    ['نذر و قربانی',2.5],['همدلی',10],['استفاده بهینه از حامل‌های انرژی',5],
+    ['صرفه‌جویی در مصارف خانگی',5],['اعیاد دینی و مذهبی',2.5],['روش‌های صرفه جویی',5],
+    ['درخت و درختکاری',5],['اشتغال‌زایی',2.5],['کاهش مصرف',5],['ماه ذیحجه، ذالحجه',2.5],
+    ['غرب زدگی، غرب زده',5]
+  ]},
+  {date:'1405/03/07', topics:[
+    ['مهارت‌های عمومی',5],['مهارت های تربیتی',5],['مشاوره خانواده',15],['داروهای گیاهی',5],
+    ['روش‌های صرفه جویی',2.5],['همدلی',5],['استفاده بهینه از حامل‌های انرژی',2.5],
+    ['درخت و درختکاری',5],['مشورت کردن',5]
+  ]},
+  {date:'1405/03/10', topics:[
+    ['کاهش مصرف',5],['صرفه جویی در مصرف در مصارف خانگی',5],['استفاده بهینه از حامل‌های انرژی',5],
+    ['درخت و درختکاری',5],['داروهای گیاهی',5],['صرفه‌جویی در مصارف خانگی',5],
+    ['خانواده',5],['همدلی',5],['مشکلات روحی-روانی و گرایش به اعتیاد',2.5],
+    ['گسترش اعتیاد',5],['عوامل مؤثر بر اعتیاد',2.5]
+  ]},
+  {date:'1405/03/12', topics:[
+    ['فرهنگ مصرف صحیح',10],['درخت و درختکاری',5],['داروهای گیاهی',5],['روش‌های صرفه جویی',5],
+    ['خرید کالای ایرانی و اشتغال',5],['صرفه جویی در مصرف در مصارف خانگی',5],
+    ['استفاده بهینه از حامل‌های انرژی',5],['همدلی',5],['الگوی مصرف',5]
+  ]},
+  {date:'1405/03/14', topics:[
+    ['غدیر، واقعه و رویداد غدیر خم',5],['درخت و درختکاری',5],['روش‌های صرفه جویی',2.5],
+    ['استفاده بهینه از حامل‌های انرژی',5],['همدلی',10],['آموزش آشپزی',5],
+    ['خانواده دینی',2.5],['تجدید عهد با آرمان‌های امام خمینی(ره)',5],['جامعه خانواده محور',10]
+  ]},
+  {date:'1405/03/17', topics:[
+    ['خانواده',5],['فرهنگ کار جمعی',5],['همدلی',5],['کار مشارکتی',5],
+    ['آثار اجتماعی همیاری و تعاون',5],['آموزش آشپزی',5],['داروهای گیاهی',5],
+    ['روش‌های صرفه جویی',5],['استفاده بهینه از حامل‌های انرژی',5],['درخت و درختکاری',5]
+  ]},
+  {date:'1405/03/19', topics:[
+    ['درخت و درختکاری',5],['مشتری مداری',5],['استفاده بهینه از حامل‌های انرژی',5],
+    ['مشاغل خانگی، خود اشتغالی',5],['مبارزه با تهیه و توزیع مواد مخدر و روان گردان',10],
+    ['آموزش آشپزی',5],['صنایع و هنرهای دستی',5],['خانواده',5],['همدلی',5]
+  ]},
+  {date:'1405/03/21', topics:[
+    ['درخت و درختکاری',5],['دعا',5],['سالمندی، پیری',10],['احترام و مودّت و رحمت',5],
+    ['خانواده',10],['آموزش آشپزی',5],['داروهای گیاهی',5],['همدلی',5]
+  ]},
+  {date:'1405/03/24', topics:[
+    ['خشونت',25],['صرفه‌جویی در مصارف خانگی',2.5],['روش‌های صرفه جویی',2.5],
+    ['درخت و درختکاری',2.5],['همدلی',2.5],['آموزش آشپزی',2.5],['داروهای گیاهی',2.5],
+    ['تربیت فرزندان',5],['اخلاق',5]
+  ]}
+];
+
+/* =========================================================
+   2) ابزارها
+   ========================================================= */
+const FA_DIGITS = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+const toFa = v => String(v).replace(/\d/g, d => FA_DIGITS[+d]);
+const MONTHS = ['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور',
+                'مهر','آبان','آذر','دی','بهمن','اسفند'];
+
+function faDate(iso){
+  const [y,m,d] = iso.split('/').map(Number);
+  return `${toFa(d)} ${MONTHS[m-1]} ${toFa(y)}`;
+}
+function durFa(min){
+  const mm = Math.floor(min), ss = Math.round((min - mm) * 60);
+  return ss ? toFa(`${mm}:${String(ss).padStart(2,'0')}`) : toFa(mm);
+}
+function durLabel(min){ return durFa(min) + ' دقیقه'; }
+
+/* =========================================================
+   3) محورهای موضوعی و تخصیص خودکار
+   ========================================================= */
+const CLUSTER_RULES = [
+  {name:'مصرف بهینه و انرژی', color:'#26d0a5', keys:[
+    'حامل‌های انرژی','حامل های انرژی','صرفه','مصرف','برق','گاز','آب','اسراف',
+    'الگوی مصرف','بهره‌وری','اقتصاد خانواده','مدیریت اقتصادی','رزق و روزی',
+    'خرید کالای ایرانی','فناوری و اصلاح','کاهش مصرف','افزایش مصرف',
+    'آموزه‌های دینی مصرف','فرهنگ مصرف صحیح','مشاغل خانگی','فرصت‌های شغلی',
+    'اشتغال‌زایی','صنایع و هنرهای دستی','استقلال','زنان و عرصه‌های اقتصادی','مشتری مداری'
+  ]},
+  {name:'خانواده و تربیت فرزند', color:'#4f8cff', keys:[
+    'خانواده','فرزند','تربیت','ازدواج','همسر','کودک','والدین','مشاوره خانواده',
+    'روابط خانوادگی','جایگاه صحیح','صمیمیت','کانون آرامش','مهارت آموزی',
+    'آداب و رفتارهای','دانش افزای','اوقات فراغت فرزندان','مهارت های تربیتی',
+    'مشاوره ازدواج','معیارهای ازدواج','فواید اجتماعی ازدواج','تحقیق پیش از ازدواج',
+    'رعایت تناسبات فرهنگی','ازدواج ساده','ابعاد قدسی','خانواده دینی',
+    'جامعه خانواده محور','الگوی مطلوب پوشش','انواع بازی رایانه‌ای','بازی‌ محلی',
+    'بازی‌های هیجانی','ارتباط کلامی','عشق و محبت در خانواده'
+  ]},
+  {name:'آسیب‌های اجتماعی و امنیت', color:'#ff6b8a', keys:[
+    'خشونت','اعتیاد','مواد مخدر','روان گردان','آسیب‌های فضای مجازی',
+    'دوستی‌های ناسالم','مفاسد','دشمن شناسی','حمله','تهاجم','امنیت',
+    'مبارزه با ظلم','ظالم','جرم','مبارزه با تهیه','گسترش اعتیاد',
+    'عوامل مؤثر بر اعتیاد','مشکلات روحی-روانی و گرایش به اعتیاد',
+    'مشارکت مردمی و تأمین امنیت','سلامت و امنیت اجتماعی','امنیت اجتماعی',
+    'مناطق جنگی','غرب زدگی'
+  ]},
+  {name:'سلامت، روان و سبک زندگی', color:'#ffb020', keys:[
+    'سلامت','روحی','روانی','استرس','فشار','امید به زندگی','سبک زندگی',
+    'شادی','نشاط','ورزش','داروهای گیاهی','طب سنتی','آشپزی','سالمندی','پیری',
+    'مرگ','فوت','امید و سلامت','مسائل روحی','حزن','اندوه','غم'
+  ]},
+  {name:'آموزش، مهارت و رسانه', color:'#a78bfa', keys:[
+    'آموزش و پرورش','کلاس درس','دانش‌آموز','تجلیل از معلم','فضاهای آموزشی',
+    'تفکرپروری','دانش افزای','مهارت‌های عمومی','استعداد','هدایت فکری',
+    'فکر، اندیشه','تصمیم‌گیری','برنامه‌ریزی','مشورت کردن','مهارت "نه گفتن"',
+    'رسانه ملی','صدا و سیما','عکس‌العمل','واکنش','موفقیت',
+    'خودباوری و اعتماد به نفس','خودباوری','تفکر','خلاقیت','نوآوری'
+  ]},
+  {name:'ارزش‌های اجتماعی و همدلی', color:'#22d3ee', keys:[
+    'همدلی','همیاری','همبستگی','وحدت','صلح','احترام','مودّت','رحمت',
+    'معاشرت','مشارکت','کار گروهی','فرهنگ کار جمعی','کار مشارکتی',
+    'آثار اجتماعی همیاری','مسئولیت اجتماعی','رعایت نظم اجتماعی',
+    'خدمت کردن','خدمتگزاری','کمک به نیازمندان','خلیج فارس','خودباوی ملی',
+    'حفظ وحدت ملی','همکاری مردم با مسئولان','تدبیر','هنجارهای فرهنگی',
+    'آداب و رفتار اجتماعی','احترام به عقاید','امر به معروف','نهی از منکر',
+    'تشکرکردن','سپاسگزاری','اخلاق'
+  ]},
+  {name:'محیط زیست و درختکاری', color:'#84cc16', keys:[
+    'درخت','درختکاری','محیط زیست','فضای سبز'
+  ]},
+  {name:'مناسبت‌ها و معنویت', color:'#f472b6', keys:[
+    'نوروز','غدیر','اعیاد','ماه ذیحجه','قرآن','دعا','امید به خدا',
+    'رفتارهای معنوی','تجدید عهد','آرمان‌های امام','نذر و قربانی',
+    'امیدواری','آرزو','خدا'
+  ]}
+];
+const FALLBACK = {name:'سایر موضوعات', color:'#94a3b8'};
+const COLOR_MAP = Object.fromEntries([...CLUSTER_RULES, FALLBACK].map(r => [r.name, r.color]));
+
+function norm(s){
+  return String(s)
+    .replace(/ي/g,'ی')
+    .replace(/ك/g,'ک')
+    .replace(/\u200c/g,' ')
+    .replace(/\s+/g,' ')
+    .trim();
+}
+function clusterOf(topic){
+  const n = norm(topic);
+  for (const rule of CLUSTER_RULES){
+    if (rule.keys.some(k => n.includes(norm(k)))) return rule.name;
+  }
+  return FALLBACK.name;
+}
+
+/* =========================================================
+   4) محاسبات
+   ========================================================= */
+const ALL_TOPICS = EPISODES.flatMap(e =>
+  e.topics.map(([topic, min]) => ({
+    date: e.date,
+    topic,
+    min,
+    cluster: clusterOf(topic)
+  }))
+);
+
+const TOTAL_MIN = ALL_TOPICS.reduce((s,r) => s + r.min, 0);
+const UNIQUE_TOPICS = new Set(ALL_TOPICS.map(r => r.topic)).size;
+
+const stats = {};
+ALL_TOPICS.forEach(r => {
+  if (!stats[r.cluster]) stats[r.cluster] = {name:r.cluster, minutes:0, dates:new Set(), topics:0};
+  stats[r.cluster].minutes += r.min;
+  stats[r.cluster].dates.add(r.date);
+  stats[r.cluster].topics++;
+});
+const CLUSTERS = Object.values(stats)
+  .map(s => ({
+    ...s,
+    episodes: s.dates.size,
+    color: COLOR_MAP[s.name] || FALLBACK.color
+  }))
+  .sort((a,b) => b.minutes - a.minutes);
+
+/* =========================================================
+   5) KPI
+   ========================================================= */
+const KPIS = [
+  {val:32, num:32, lbl:'قسمت برنامه (طبق شناسنامه)', ic:'📺', ac:'#4f8cff'},
+  {val:50, num:50, lbl:'دقیقه، مدت هر قسمت', ic:'⏱', ac:'#26d0a5'},
+  {val:TOTAL_MIN, num:TOTAL_MIN, lbl:`دقیقه محتوای ثبت‌شده (${toFa(Math.floor(TOTAL_MIN/60))} ساعت)`, ic:'🎙', ac:'#ffb020'},
+  {val:ALL_TOPICS.length, num:ALL_TOPICS.length, lbl:'رکورد موضوعی', ic:'🏷', ac:'#a78bfa'},
+  {val:UNIQUE_TOPICS, num:UNIQUE_TOPICS, lbl:'موضوع یکتا', ic:'✨', ac:'#f472b6'},
+  {val:'۷۰/۳۰', lbl:'درصد زنده / ضبطی', ic:'🔴', ac:'#22d3ee'}
+];
+
+const kpiBox = document.getElementById('kpis');
+KPIS.forEach((k,i) => {
+  const d = document.createElement('div');
+  d.className = 'kpi';
+  d.style.setProperty('--ac', k.ac);
+  const valHtml = typeof k.val === 'number'
+    ? `<span data-num="${k.val}">۰</span>`
+    : `<span>${k.val}</span>`;
+  d.innerHTML = `<div class="ic">${k.ic}</div>
+                 <div class="val">${valHtml}<small>${k.suf || ''}</small></div>
+                 <div class="lbl">${k.lbl}</div>`;
+  kpiBox.appendChild(d);
+
+  if (typeof k.val === 'number'){
+    const el = d.querySelector('[data-num]');
+    setTimeout(() => countUp(el, k.val), 120 + i*90);
+  }
+});
+
+function countUp(el, target, duration = 1100){
+  const start = performance.now();
+  function step(now){
+    const p = Math.min((now - start) / duration, 1);
+    const v = Math.round(target * (1 - Math.pow(1 - p, 3)));
+    el.textContent = toFa(v);
+    if (p < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+/* =========================================================
+   6) نمودار حلقه‌ای
+   ========================================================= */
+(function buildDonut(){
+  const NS = 'http://www.w3.org/2000/svg';
+  const svg = document.getElementById('donut');
+  const CX = 130, CY = 130, R = 92, SW = 26;
+  const C = 2 * Math.PI * R;
+
+  const bg = document.createElementNS(NS,'circle');
+  bg.setAttribute('cx',CX); bg.setAttribute('cy',CY); bg.setAttribute('r',R);
+  bg.setAttribute('fill','none');
+  bg.setAttribute('stroke','rgba(255,255,255,.06)');
+  bg.setAttribute('stroke-width',SW);
+  svg.appendChild(bg);
+
+  let offset = 0;
+  const segs = [];
+
+  CLUSTERS.forEach((c,i) => {
+    const len = (c.minutes / TOTAL_MIN) * C;
+    const seg = document.createElementNS(NS,'circle');
+    seg.setAttribute('cx',CX); seg.setAttribute('cy',CY); seg.setAttribute('r',R);
+    seg.setAttribute('fill','none');
+    seg.setAttribute('stroke',c.color);
+    seg.setAttribute('stroke-width',SW);
+    seg.setAttribute('transform',`rotate(-90 ${CX} ${CY})`);
+    seg.style.strokeDasharray = `0 ${C}`;
+    seg.style.strokeDashoffset = String(-offset);
+    seg.style.transition = 'stroke-dasharray 1.1s cubic-bezier(.2,.8,.2,1), opacity .25s ease';
+    seg.setAttribute('class','donut-seg');
+    seg.dataset.idx = i;
+    svg.appendChild(seg);
+    segs.push(seg);
+
+    setTimeout(() => {
+      const gap = 2.5;
+      seg.style.strokeDasharray = `${Math.max(len - gap, 0)} ${C - len + gap}`;
+    }, 160 + i*95);
+
+    offset += len;
+  });
+
+  const t1 = document.createElementNS(NS,'text');
+  t1.setAttribute('x',CX); t1.setAttribute('y',CY - 2);
+  t1.setAttribute('text-anchor','middle');
+  t1.setAttribute('class','donut-center-num');
+  t1.setAttribute('direction','rtl');
+  t1.textContent = toFa(TOTAL_MIN);
+  svg.appendChild(t1);
+
+  const t2 = document.createElementNS(NS,'text');
+  t2.setAttribute('x',CX); t2.setAttribute('y',CY + 24);
+  t2.setAttribute('text-anchor','middle');
+  t2.setAttribute('class','donut-center-lbl');
+  t2.setAttribute('direction','rtl');
+  t2.textContent = 'دقیقه محتوا';
+  svg.appendChild(t2);
+
+  const legend = document.getElementById('legend');
+  CLUSTERS.forEach((c,i) => {
+    const pct = ((c.minutes / TOTAL_MIN) * 100).toFixed(1);
+    const d = document.createElement('div');
+    d.className = 'lg';
+    d.innerHTML = `<i style="background:${c.color};box-shadow:0 0 10px ${c.color}"></i>
+                   <span>${c.name}</span>
+                   <b>${toFa(c.minutes)}′</b>
+                   <em>${toFa(pct)}٪</em>`;
+    d.addEventListener('mouseenter', () => highlight(i));
+    d.addEventListener('mouseleave', () => highlight(-1));
+    legend.appendChild(d);
+  });
+
+  segs.forEach(s => {
+    s.addEventListener('mouseenter', () => highlight(+s.dataset.idx));
+    s.addEventListener('mouseleave', () => highlight(-1));
+  });
+
+  function highlight(idx){
+    segs.forEach((s,i) => s.style.opacity = (idx === -1 || i === idx) ? 1 : 0.22);
+  }
+})();
+
+/* =========================================================
+   7) نمودار میله‌ای افقی
+   ========================================================= */
+(function buildBars(){
+  const box = document.getElementById('bars');
+  const max = Math.max(...CLUSTERS.map(c => c.minutes));
+  CLUSTERS.forEach((c,i) => {
+    const pct = (c.minutes / max) * 100;
+    const row = document.createElement('div');
+    row.className = 'bar-row';
+    row.innerHTML = `
+      <div class="bl" title="${c.name}">${c.name}</div>
+      <div class="track"><div class="fill" style="background:linear-gradient(90deg,${c.color},${c.color}aa)"></div></div>
+      <div class="bv">${toFa(c.minutes)} دقیقه</div>`;
+    box.appendChild(row);
+    const fill = row.querySelector('.fill');
+    setTimeout(() => fill.style.width = pct + '%', 200 + i*90);
+  });
+})();
+
+/* =========================================================
+   8) خط زمانی
+   ========================================================= */
+(function buildTimeline(){
+  const box = document.getElementById('timeline');
+  const sorted = [...EPISODES].sort((a,b) => a.date.localeCompare(b.date));
+
+  sorted.forEach(ep => {
+    const sum = ep.topics.reduce((s,t) => s + t[1], 0);
+    const item = document.createElement('div');
+    item.className = 'tl-item';
+    item.style.setProperty('--dot', '#4f8cff');
+
+    const chips = ep.topics.map(([t,m]) => {
+      const cl = clusterOf(t);
+      const color = COLOR_MAP[cl] || FALLBACK.color;
+      return `<span class="chip"><i style="background:${color}"></i>${t} <em>${durLabel(m)}</em></span>`;
+    }).join('');
+
+    item.innerHTML = `
+      <div class="tl-head">
+        <span class="tl-date">${faDate(ep.date)}</span>
+        <span class="tl-num">${toFa(sum)} دقیقه · ${toFa(ep.topics.length)} موضوع</span>
+      </div>
+      <div class="chips">${chips}</div>`;
+    box.appendChild(item);
+  });
+})();
+
+/* =========================================================
+   9) طولانی‌ترین موضوعات
+   ========================================================= */
+(function buildTopTopics(){
+  const box = document.getElementById('topTopics');
+  const top = [...ALL_TOPICS]
+    .sort((a,b) => b.min - a.min || a.topic.localeCompare(b.topic,'fa'))
+    .slice(0, 10);
+  const max = top[0].min;
+
+  top.forEach((r,i) => {
+    const pct = (r.min / max) * 100;
+    const color = COLOR_MAP[r.cluster] || FALLBACK.color;
+    const row = document.createElement('div');
+    row.className = 'bar-row';
+    row.innerHTML = `
+      <div class="bl" title="${r.topic}">${r.topic}</div>
+      <div class="track"><div class="fill" style="background:linear-gradient(90deg,${color},${color}99)"></div></div>
+      <div class="bv">${durFa(r.min)}′</div>`;
+    box.appendChild(row);
+    const fill = row.querySelector('.fill');
+    setTimeout(() => fill.style.width = pct + '%', 200 + i*70);
+  });
+})();
+
+/* =========================================================
+   10) جدول محورها
+   ========================================================= */
+(function buildThemeTable(){
+  const tb = document.getElementById('themeTbody');
+  CLUSTERS.forEach(c => {
+    const pct = ((c.minutes / TOTAL_MIN) * 100).toFixed(1);
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><span style="display:inline-block;width:9px;height:9px;border-radius:50%;
+           background:${c.color};box-shadow:0 0 9px ${c.color};margin-inline-end:8px"></span>${c.name}</td>
+      <td>${toFa(c.episodes)}</td>
+      <td>${toFa(c.minutes)}</td>
+      <td><span class="mini-bar" style="width:${Math.max(pct*0.9,6)}px;background:${c.color}"></span>${toFa(pct)}٪</td>`;
+    tb.appendChild(tr);
+  });
+})();
+
+/* =========================================================
+   11) جدول ریز داده‌ها + فیلتر و جست‌وجو
+   ========================================================= */
+(function buildDataTable(){
+  const tbody  = document.getElementById('dataTbody');
+  const search = document.getElementById('search');
+  const filter = document.getElementById('filter');
+
+  const all = document.createElement('option');
+  all.value = 'all';
+  all.textContent = 'همهٔ محورها';
+  filter.appendChild(all);
+
+  CLUSTERS.forEach(c => {
+    const o = document.createElement('option');
+    o.value = c.name;
+    o.textContent = c.name;
+    filter.appendChild(o);
+  });
+
+  const rows = [...ALL_TOPICS].sort((a,b) =>
+    a.date.localeCompare(b.date) || b.min - a.min
+  );
+
+  function render(){
+    const q  = norm(search.value);
+    const cl = filter.value;
+    const list = rows.filter(r =>
+      (cl === 'all' || r.cluster === cl) &&
+      (!q || norm(r.topic).includes(q) || norm(r.cluster).includes(q))
+    );
+
+    if (!list.length){
+      tbody.innerHTML = `<tr><td colspan="4" class="empty">موردی یافت نشد.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = list.map(r => {
+      const color = COLOR_MAP[r.cluster] || FALLBACK.color;
+      return `<tr>
+        <td style="white-space:nowrap;color:#aebbd8">${faDate(r.date)}</td>
+        <td style="white-space:nowrap">
+          <span style="display:inline-block;width:8px;height:8px;border-radius:50%;
+                background:${color};margin-inline-end:7px"></span>${r.cluster}</td>
+        <td>${r.topic}</td>
+        <td style="white-space:nowrap;font-weight:600">${durFa(r.min)}′</td>
+      </tr>`;
+    }).join('');
+  }
+
+  search.addEventListener('input', render);
+  filter.addEventListener('change', render);
+  render();
+})();
+</script>
+</body>
+</html>
